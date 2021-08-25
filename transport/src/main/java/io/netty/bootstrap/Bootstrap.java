@@ -42,6 +42,8 @@ import java.net.SocketAddress;
  *
  * <p>The {@link #bind()} methods are useful in combination with connectionless transports such as datagram (UDP).
  * For regular TCP connections, please use the provided {@link #connect()} methods.</p>
+ *
+ * 配置引导类
  */
 public class Bootstrap extends AbstractBootstrap<Bootstrap, Channel> {
 

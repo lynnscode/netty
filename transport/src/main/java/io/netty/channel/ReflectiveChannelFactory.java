@@ -23,9 +23,11 @@ import java.lang.reflect.Constructor;
 
 /**
  * A {@link ChannelFactory} that instantiates a new {@link Channel} by invoking its default constructor reflectively.
+ * Channel 工厂类
  */
 public class ReflectiveChannelFactory<T extends Channel> implements ChannelFactory<T> {
 
+    //记录传入的 channel 类构造方法, newChannel 方法调用的时候直接创建
     private final Constructor<? extends T> constructor;
 
     public ReflectiveChannelFactory(Class<? extends T> clazz) {

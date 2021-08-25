@@ -65,6 +65,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     // purposes.
     private final Map<ChannelOption<?>, Object> options = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> attrs = new ConcurrentHashMap<AttributeKey<?>, Object>();
+    //数据处理器
     private volatile ChannelHandler handler;
 
     AbstractBootstrap() {
