@@ -40,6 +40,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
+ * 默认的 Pipeline
  * The default {@link ChannelPipeline} implementation.  It is usually created
  * by a {@link Channel} implementation when the {@link Channel} is created.
  */
@@ -61,6 +62,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     private static final AtomicReferenceFieldUpdater<DefaultChannelPipeline, MessageSizeEstimator.Handle> ESTIMATOR =
             AtomicReferenceFieldUpdater.newUpdater(
                     DefaultChannelPipeline.class, MessageSizeEstimator.Handle.class, "estimatorHandle");
+    //pipeline 是一个双向链表
     final AbstractChannelHandlerContext head;
     final AbstractChannelHandlerContext tail;
 
@@ -116,6 +118,13 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         return touch ? ReferenceCountUtil.touch(msg, next) : msg;
     }
 
+    /**
+     * 把handler和 handlerName 组装成AbstractChannelHandlerContext 对象
+     * @param group
+     * @param name
+     * @param handler
+     * @return
+     */
     private AbstractChannelHandlerContext newContext(EventExecutorGroup group, String name, ChannelHandler handler) {
         return new DefaultChannelHandlerContext(this, childExecutor(group), name, handler);
     }
@@ -182,6 +191,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         return this;
     }
 
+    //添加到链表头部
     private void addFirst0(AbstractChannelHandlerContext newCtx) {
         AbstractChannelHandlerContext nextCtx = head.next;
         newCtx.prev = head;
@@ -200,7 +210,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         final AbstractChannelHandlerContext newCtx;
         synchronized (this) {
             checkMultiplicity(handler);
-
+            //使用 handler 和 name 拼装AbstractChannelHandlerContext对象
             newCtx = newContext(group, filterName(name, handler), handler);
 
             addLast0(newCtx);
@@ -224,6 +234,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         return this;
     }
 
+    //将 handler 添加到链表的尾部
     private void addLast0(AbstractChannelHandlerContext newCtx) {
         AbstractChannelHandlerContext prev = tail.prev;
         newCtx.prev = prev;
@@ -281,6 +292,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         if (name == null) {
             return generateName(handler);
         }
+        //不允许 name 相同的 handler
         checkDuplicateName(name);
         return name;
     }

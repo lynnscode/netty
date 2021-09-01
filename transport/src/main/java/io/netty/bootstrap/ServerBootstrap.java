@@ -78,6 +78,10 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
      * Set the {@link EventLoopGroup} for the parent (acceptor) and the child (client). These
      * {@link EventLoopGroup}'s are used to handle all the events and IO for {@link ServerChannel} and
      * {@link Channel}'s.
+     *
+     * parentGroup 反应器轮询组，一般负责连接事件处理
+     * childGroup 反应器轮询组，一般负责读写事件处理，真正的数据处理
+     *
      */
     public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup) {
         super.group(parentGroup);
